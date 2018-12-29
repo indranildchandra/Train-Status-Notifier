@@ -45,11 +45,11 @@ for file in os.listdir(key_data_path):
 	with open(file_path, 'r', encoding="utf8", errors='ignore') as f:
 		lines = f.readlines()
 
-	file = file.replace(".txt","")
-	key_data[file] = []
+	_class = '.'.join(file.split('.')[:-1])
+	key_data[_class] = []
 	for line in lines:
 		stemmed = " ".join([stemmer.stem(w) for w in word_tokenize(line)])
-		key_data[file].append(stemmed)
+		key_data[_class].append(stemmed)
 
 
 for file in tqdm.tqdm(os.listdir(data_path)):
@@ -67,7 +67,7 @@ for file in tqdm.tqdm(os.listdir(data_path)):
 
 			# # Find the offending character index:
 			# idx_to_replace = int(str(e).split(' ')[-1].replace(')',''))
-			# print(idx_to_replace)
+			# print("Position of invalid character - " + idx_to_replace)
 			# data = open(file_path, "r").read()
 			# # Remove the offending character:
 			# data_json = list(data)
