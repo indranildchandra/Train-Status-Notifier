@@ -25,7 +25,11 @@ for post in posts:
 	text = text.strip()
 	if dataset.get(_class) == None:
 		dataset[_class] = []
-	dataset[_class].append(text)
+	if _class not in ['ynQuestion','whQuestion'] and len(text) > 3:
+		dataset[_class].append(text)
+	elif _class in ['ynQuestion','whQuestion']:
+		dataset[_class].append(text)
+
 
 for _class, texts in dataset.items():
 	texts = random.sample(texts,533) 
