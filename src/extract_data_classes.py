@@ -47,10 +47,11 @@ for file in os.listdir(key_data_path):
 	with open(file_path, 'r', encoding="utf8") as f:
 		lines = f.readlines()
 
-	key_data[file] = []
+	_class = '.'.join(file.split('.')[:-1])
+	key_data[_class] = []
 	for line in lines:
 		stemmed = " ".join([stemmer.stem(w) for w in word_tokenize(line)])
-		key_data[file].append(stemmed)
+		key_data[_class].append(stemmed)
 
 for file in tqdm.tqdm(os.listdir(data_path)):
 	file_path = os.path.join(data_path,file)
@@ -64,9 +65,9 @@ for file in tqdm.tqdm(os.listdir(data_path)):
 
 	for stemmed_msg, timestamp in messages_arr_stemmed:
 		if isQuestion(data_json[timestamp]['m']):
-			if labeled_data.get('questions.txt') is None:
-				labeled_data[_class] = []
-			labeled_data[_class].append(data_json[timestamp])
+			if labeled_data.get('questions') is None:
+				labeled_data['questions'] = []
+			labeled_data['questions'].append(data_json[timestamp])
 		else:
 			for _class, _ in key_data.items():
 				for keyword in key_data[_class]:
@@ -75,6 +76,11 @@ for file in tqdm.tqdm(os.listdir(data_path)):
 							labeled_data[_class] = []
 						labeled_data[_class].append(data_json[timestamp])
 
+if not os.path.exists('classify_text_cnn/data/mIndicator'):
+	os.makedirs('classify_text_cnn/data/mIndicator')
+for _class, data in labeled_data.items():
+	with open('classify_text_cnn/data/mIndicator/{}.txt'.format(_class), 'w') as f:
+		f.write('\n'.join([i['m'] for i in data]))
 
 with open(out_path, 'w', encoding="utf8") as f:
 	json.dump(labeled_data, f)
