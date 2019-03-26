@@ -51,7 +51,6 @@ for file in os.listdir(key_data_path):
 		stemmed = " ".join([stemmer.stem(w) for w in word_tokenize(line)])
 		key_data[_class].append(stemmed)
 
-
 for file in tqdm.tqdm(os.listdir(data_path)):
 
 	file_path = os.path.join(data_path,file)
@@ -78,7 +77,6 @@ for file in tqdm.tqdm(os.listdir(data_path)):
 			# print(json.dumps(data_json, indent=4, sort_keys=True))
 			
 	messages_arr_stemmed = []
-
 	if bool(data_json):
 		for timestamp, data in data_json.items():
 			msg_lemmed = " ".join([wordnet_lemmatizer.lemmatize(w) for w in word_tokenize(data['m'])])
